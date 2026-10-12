@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Tierragrande — IA Generativa · Comité Directivo</title>
+<style>
+  :root{
+    --ink:#020617;        /* texto principal (navy casi negro Sumz) */
+    --ink-deep:#010516;   /* fondo oscuro portada */
+    --forest:#1A2D26;     /* verde bosque Sumz */
+    --mint:#5AF8BD;       /* ACENTO verde menta Sumz */
+    --neutral:#797B97;    /* lavanda-gris */
+    --lav:#D4D6F2;        /* lavanda claro */
+    --bg:#FFFFFF;
+    --bg-soft:#F7F8FA;
+    --pos:#16A34A;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{background:#333;}
+  @font-face{font-family:'Inter';src:local('Inter'),local('Helvetica Neue'),local('Arial');}
+  body{font-family:'Inter','Helvetica Neue',Arial,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;}
+
+  .slide{
+    position:relative;width:1280px;height:720px;background:var(--bg);
+    page-break-after:always;overflow:hidden;
+    padding:56px 72px 64px 72px;display:flex;flex-direction:column;
+  }
+  .slide:last-child{page-break-after:auto;}
+
+  /* ----- header / footer anchors ----- */
+  .eyebrow{font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--neutral);font-weight:600;margin-bottom:10px;}
+  .eyebrow .dot{color:var(--mint);}
+  h1.headline{font-size:33px;line-height:1.18;font-weight:800;color:var(--ink);max-width:1120px;}
+  h1.headline .accent{color:var(--ink);border-bottom:4px solid var(--mint);padding-bottom:1px;}
+  .footer{position:absolute;left:72px;right:72px;bottom:22px;display:flex;justify-content:space-between;align-items:center;
+          font-size:12px;color:var(--neutral);border-top:1px solid var(--lav);padding-top:8px;}
+  .footer .brand{font-weight:700;letter-spacing:.04em;color:var(--ink);}
+  .footer .brand b{color:var(--mint);}
+  .pageno{font-variant-numeric:tabular-nums;}
+  .serves{display:inline-block;font-size:12px;font-weight:600;color:var(--forest);background:rgba(90,248,189,.22);
+          border:1px solid var(--mint);border-radius:999px;padding:3px 11px;}
+
+  .body{flex:1;display:flex;flex-direction:column;justify-content:center;}
+  ul.bul{list-style:none;margin-top:8px;}
+  ul.bul li{position:relative;padding-left:26px;margin:13px 0;font-size:20px;line-height:1.4;color:var(--ink);max-width:1040px;}
+  ul.bul li::before{content:"";position:absolute;left:0;top:9px;width:11px;height:11px;background:var(--mint);border-radius:2px;}
+  ul.bul li b{font-weight:800;}
+  .sub{color:var(--neutral);font-size:16px;}
+
+  .tag{font-size:12px;color:var(--neutral);margin-top:10px;line-height:1.45;}
+  .tag b{color:var(--forest);}
+
+  /* ----- cover ----- */
+  .cover{background:var(--ink-deep);color:#fff;justify-content:center;}
+  .cover .kick{font-size:15px;letter-spacing:.22em;text-transform:uppercase;color:var(--mint);font-weight:700;margin-bottom:22px;}
+  .cover h1{font-size:46px;line-height:1.14;font-weight:800;max-width:1040px;color:#fff;}
+  .cover h1 .m{color:var(--mint);}
+  .cover .ask{margin-top:26px;font-size:21px;line-height:1.5;color:var(--lav);max-width:980px;}
+  .cover .ask b{color:#fff;}
+  .cover .meta{margin-top:40px;font-size:14px;color:var(--neutral);line-height:1.7;}
+  .cover .meta b{color:#fff;}
+  .cover .rule{width:88px;height:5px;background:var(--mint);margin:4px 0 26px;border-radius:3px;}
+  .cover .foot-brand{position:absolute;bottom:40px;right:72px;font-size:14px;font-weight:700;letter-spacing:.05em;color:#fff;}
+  .cover .foot-brand b{color:var(--mint);}
+
+  /* ----- big number ----- */
+  .bignum{font-size:112px;font-weight:800;line-height:.95;color:var(--ink);letter-spacing:-.02em;}
+  .bignum .m{color:var(--mint);-webkit-text-stroke:1px var(--forest);}
+  .numlabel{font-size:20px;color:var(--neutral);margin-top:6px;font-weight:600;}
+  .numrow{display:flex;gap:64px;align-items:flex-start;margin-top:6px;}
+  .numcard{}
+  .numcard .n{font-size:76px;font-weight:800;line-height:1;color:var(--ink);letter-spacing:-.01em;}
+  .numcard .n.m{color:var(--forest);}
+  .numcard .n .mint{color:var(--mint);-webkit-text-stroke:.5px var(--forest);}
+  .numcard .l{font-size:16px;color:var(--neutral);margin-top:8px;max-width:300px;line-height:1.35;}
+
+  /* ----- quote ----- */
+  .quote{border-left:5px solid var(--mint);padding:6px 0 6px 20px;margin:4px 0 2px;}
+  .quote p{font-size:18px;font-style:italic;color:var(--ink);line-height:1.4;max-width:980px;}
+  .quote .who{font-size:14px;color:var(--neutral);margin-top:7px;font-style:normal;font-weight:600;}
+
+  /* ----- diagram ----- */
+  .diagwrap{flex:1;display:flex;align-items:center;justify-content:center;margin-top:6px;}
+  .diagwrap img{max-height:498px;max-width:100%;object-fit:contain;}
+  .two{display:flex;gap:30px;flex:1;margin-top:4px;}
+  .two .col{flex:1;display:flex;flex-direction:column;}
+  .two .col h3{font-size:17px;font-weight:800;color:var(--forest);margin-bottom:6px;}
+  .two .col h3 .n{color:var(--mint);-webkit-text-stroke:.5px var(--forest);}
+  .two .col .ib{flex:1;display:flex;align-items:center;justify-content:center;background:var(--bg-soft);border:1px solid var(--lav);border-radius:8px;padding:8px;}
+  .two .col .ib img{max-height:396px;max-width:100%;object-fit:contain;}
+
+  /* ----- proposal table ----- */
+  table.prop{border-collapse:collapse;width:100%;margin-top:10px;font-size:17px;}
+  table.prop th,table.prop td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--lav);vertical-align:top;}
+  table.prop th{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--neutral);border-bottom:2px solid var(--forest);}
+  table.prop td b{font-weight:800;}
+  table.prop .yes{color:var(--forest);font-weight:800;}
+  table.prop .wait{color:var(--neutral);font-weight:700;}
+  table.prop tr .m{color:var(--mint);-webkit-text-stroke:.4px var(--forest);font-weight:800;}
+
+  /* budget bars */
+  .bars{margin-top:14px;}
+  .bar{display:flex;align-items:center;margin:9px 0;font-size:16px;}
+  .bar .lbl{width:300px;color:var(--ink);}
+  .bar .track{flex:1;height:22px;background:var(--bg-soft);border:1px solid var(--lav);border-radius:4px;overflow:hidden;margin:0 14px;}
+  .bar .fill{height:100%;background:var(--lav);}
+  .bar .fill.hi{background:var(--mint);}
+  .bar .val{width:150px;text-align:right;color:var(--neutral);font-variant-numeric:tabular-nums;}
+  .bar .val b{color:var(--ink);}
+
+  /* roi / payback shape */
+  .roi-shape{display:flex;gap:46px;align-items:center;margin-top:10px;}
+  .roi-left{flex:0 0 auto;}
+  .roi-right{flex:1;}
+
+  /* appendix table */
+  table.asm{border-collapse:collapse;width:100%;font-size:13.5px;}
+  table.asm th,table.asm td{text-align:left;padding:6px 10px;border-bottom:1px solid var(--lav);vertical-align:top;line-height:1.3;}
+  table.asm th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--neutral);border-bottom:2px solid var(--forest);}
+  table.asm td .id{font-weight:800;color:var(--forest);}
+  .two-col-aspt{column-count:2;column-gap:34px;}
+
+  .maprow{display:flex;gap:22px;margin-top:12px;}
+  .mapcard{flex:1;background:var(--bg-soft);border:1px solid var(--lav);border-top:4px solid var(--mint);border-radius:8px;padding:16px 18px;}
+  .mapcard .nm{font-size:17px;font-weight:800;color:var(--ink);}
+  .mapcard .ro{font-size:12.5px;color:var(--neutral);text-transform:uppercase;letter-spacing:.06em;margin-bottom:9px;}
+  .mapcard .q{font-size:13px;font-style:italic;color:var(--ink);line-height:1.38;border-left:3px solid var(--mint);padding-left:10px;margin-bottom:10px;}
+  .mapcard .a{font-size:13.5px;color:var(--forest);line-height:1.38;}
+  .mapcard .a b{font-weight:800;}
+</style>
+</head>
+<body>
+
+<!-- 1 — PORTADA + ASK -->
+<section class="slide cover">
+  <div class="kick">Comité Directivo · Programa de IA Generativa</div>
+  <div class="rule"></div>
+  <h1>Capacidad de IA Generativa:<br>empezar <span class="m">interno y medible</span>, pavimentar el camino al <span class="m">asistente de compras</span></h1>
+  <p class="ask">Pedimos al comité <b>aprobar el Año 1</b> — USD 200.000, todo incluido, para <b>2 casos internos de bajo riesgo</b> — y el <b>camino al asistente de compras en Año 2</b>, con un hito tangible para la junta en <b>6 meses</b>.</p>
+  <div class="meta">
+    <b>Audiencia:</b> Ricardo Salazar (CEO) · Patricia Duarte (CTO) · Andrés Malagón (CDO)<br>
+    <b>Horizonte:</b> 18 meses &nbsp;·&nbsp; <b>Duración:</b> 20 min &nbsp;·&nbsp; Almacenes Tierragrande
+  </div>
+  <div class="foot-brand">Sumz<b>.</b></div>
+</section>
+
+<!-- 2 — EL PROBLEMA (CEO) -->
+<section class="slide">
+  <div class="eyebrow">Situación <span class="dot">·</span> El punto de partida</div>
+  <h1 class="headline">Tierragrande es madura en datos, pero esa inversión todavía no se convierte en IA generativa</h1>
+  <div class="body">
+    <ul class="bul">
+      <li>Tres años y varios millones de dólares construyeron una plataforma que funciona: <b>lakehouse Databricks, gobierno de datos y ML en producción</b> — no partimos de cero.</li>
+      <li>La junta espera que <b>la siguiente ola de valor venga de la IA generativa</b>, sobre esa base ya pagada.</li>
+      <li>Pero el equipo de datos (15 personas) <b>no tiene experiencia productiva con LLMs ni agentes</b>: hay curiosidad y algo de ansiedad.</li>
+      <li>El reto no es construir fundaciones de datos — es <b>construir una capacidad de IA reutilizable, gobernada y operable por un equipo pequeño</b>.</li>
+    </ul>
+    <div class="tag"><b>Contexto:</b> 124 tiendas · 28.000 SKUs · 2,3 M clientes de fidelidad · e-commerce 9% de ventas, creciendo 30% anual. &nbsp;(Fuente: caso Tierragrande)</div>
+  </div>
+  <div class="footer"><span class="serves">Para: Ricardo (CEO)</span><span class="brand">Sumz<b>.</b> · IA Generativa Tierragrande</span><span class="pageno">02</span></div>
+</section>
+
+<!-- 3 — COSTO DE INACCIÓN (CEO/CTO) -->
+<section class="slide">
+  <div class="eyebrow">Complicación <span class="dot">·</span> El costo de no actuar</div>
+  <h1 class="headline">No actuar también cuesta: el competidor ya lanzó, el shadow AI ya ocurre y las PQR tardan días</h1>
+  <div class="body">
+    <div class="numrow">
+      <div class="numcard"><div class="n"><span class="mint">2,8</span> días</div><div class="l">de tiempo promedio de primera respuesta a las <b>60.000 PQR/año</b></div></div>
+      <div class="numcard"><div class="n m">Hoy</div><div class="l">empleados pegan datos de la empresa en <b>herramientas públicas de IA</b> — shadow AI sin control</div></div>
+      <div class="numcard"><div class="n"><span class="mint">2</span> meses</div><div class="l">desde que el <b>competidor regional lanzó su asistente de compras</b></div></div>
+    </div>
+    <div class="quote" style="margin-top:26px">
+      <p>“El competidor ya lanzó su asistente de compras y nosotros seguimos en comités. En seis meses quiero algo que la junta y los clientes puedan tocar.”</p>
+      <div class="who">— Ricardo Salazar, CEO</div>
+    </div>
+    <div class="tag">Cifras del caso Tierragrande. El riesgo de no hacer nada es real; la pregunta es por qué camino avanzar.</div>
+  </div>
+  <div class="footer"><span class="serves">Para: Ricardo (CEO) · Patricia (CTO)</span><span class="brand">Sumz<b>.</b> · IA Generativa Tierragrande</span><span class="pageno">03</span></div>
+</section>
+
+<!-- 4 — EL CAMBIO (CEO/CDO) -->
+<section class="slide">
+  <div class="eyebrow">Complicación <span class="dot">·</span> Por qué este camino, ahora</div>
+  <h1 class="headline">La plataforma de datos ya está lista; lo que falta es la capa de IA gobernada encima</h1>
+  <div class="body">
+    <ul class="bul">
+      <li><b>No rediseñamos las fundaciones.</b> Montamos una capa de IA generativa <b>reutilizable</b> sobre Databricks, aprovechando créditos de nube ya contratados.</li>
+      <li>El giro no es técnico sino de <b>secuencia de riesgo</b>: empezar donde el error se corrige sin daño, no donde expone al cliente.</li>
+      <li>La <b>Ley 1581</b> y el consentimiento (que Legal ya señaló) obligan a construir los rieles de gobierno <b>antes</b> de ir al cliente — no después.</li>
+      <li>El activo más valioso de la compañía es la <b>confianza en la plataforma de datos</b>; el camino debe protegerla, no arriesgarla.</li>
+    </ul>
+    <div class="tag"><b>Principio rector:</b> Año 1 = ganar confianza con riesgo interno y valor medible · Año 2 = monetizar de cara al cliente sobre rieles ya probados.</div>
+  </div>
+  <div class="footer"><span class="serves">Para: Ricardo (CEO) · Andrés (CDO)</span><span class="brand">Sumz<b>.</b> · IA Generativa Tierragrande</span><span class="pageno">04</span></div>
+</section>
+
+<!-- 5 — LA PROPUESTA (TODOS) -->
+<section class="slide">
+  <div class="eyebrow">Resolución <span class="dot">·</span> La apuesta</div>
+  <h1 class="headline">Empezar interno, medible y de bajo riesgo — y pavimentar el camino al cliente</h1>
+  <div class="body">
+    <table class="prop">
+      <tr><th style="width:26%">Decisión</th><th style="width:48%">Qué proponemos</th><th>A quién responde</th></tr>
+      <tr><td class="yes">Casos Año 1</td><td><b>1) Copiloto interno de tiendas</b> &nbsp;·&nbsp; <b>2) Contenido de catálogo e-commerce</b></td><td>CEO (valor visible) · CDO (bajo riesgo)</td></tr>
+      <tr><td class="wait">Asistente de compras (cliente)</td><td><span class="m">“Todavía no”</span> — se habilita en Año 2 sobre los rieles ya construidos</td><td>CEO (plan creíble) · CDO (sin riesgo prematuro)</td></tr>
+      <tr><td>Arquitectura</td><td>Plataforma común <b>agnóstica de modelo</b>, con gateway / abstracción</td><td>CTO (anti-lock-in, costos)</td></tr>
+      <tr><td>Build vs. Buy</td><td><b>Buy</b> lo comoditizado · <b>Build</b> solo la lógica propia</td><td>CTO (capacidad) · CEO (velocidad)</td></tr>
+      <tr><td>Gobierno</td><td>Política de uso de IA + <b>evaluación trazable desde el día 1</b></td><td>CDO (auditable) · CTO (shadow AI)</td></tr>
+    </table>
+    <div class="tag">Los 2 casos comparten ~80% de los componentes; los que vengan (asistente de compras, servicio al cliente, text-to-SQL) se enchufan a la misma base.</div>
+  </div>
+  <div class="footer"><span class="serves">Para: todo el comité</span><span class="brand">Sumz<b>.</b> · IA Generativa Tierragrande</span><span class="pageno">05</span></div>
+</section>
+
+<!-- 6 — CÓMO FUNCIONA: ARQUITECTURA (CTO/CDO) -->
+<section class="slide">
+  <div class="eyebrow">Resolución <span class="dot">·</span> Cómo funciona</div>
+  <h1 class="headline">Una plataforma común sobre Databricks: dos casos enchufados, cero infra nueva que operar</h1>
+  <div class="diagwrap"><img src="diagramas/arquitectura.png" alt="Arquitectura de la plataforma común"></div>
+  <div class="footer"><span class="serves">Para: Patricia (CTO) · Andrés (CDO)</span><span class="brand">Sumz<b>.</b> · IA Generativa Tierragrande</span><span class="pageno">06</span></div>
+</section>
+
+<!-- 7 — CÓMO FUNCIONA: LOS DOS CASOS (CTO/CDO) -->
+<section class="slide">
+  <div class="eyebrow">Resolución <span class="dot">·</span> Cómo funciona cada caso</div>
+  <h1 class="headline">Cada flujo responde con cita a la fuente y con un humano en el lazo</h1>
+  <div class="two">
+    <div class="col">
+      <h3><span class="n">Caso 1</span> — Copiloto de tiendas (RAG, cita obligatoria)</h3>
+      <div class="ib"><img src="diagramas/caso1-copiloto.png" alt="Flujo del Copiloto de tiendas"></div>
+    </div>
+    <div class="col">
+      <h3><span class="n">Caso 2</span> — Catálogo e-commerce (human-in-the-loop + A/B)</h3>
+      <div class="ib"><img src="diagramas/caso2-catalogo.png" alt="Flujo del Catálogo e-commerce"></div>
+    </div>
+  </div>
+  <div class="footer"><span class="serves">Para: Patricia (CTO) · Andrés (CDO)</span><span class="brand">Sumz<b>.</b> · IA Generativa Tierragrande</span><span class="pageno">07</span></div>
+</section>
+
+<!-- 8 — RIESGO Y GOBIERNO (CDO/CTO) -->
+<section class="slide">
+  <div class="eyebrow">Resolución <span class="dot">·</span> Control de riesgo y gobierno</div>
+  <h1 class="headline">Cero alucinaciones por diseño: evaluación con compuerta go/no-go, citas obligatorias y trazabilidad total</h1>
+  <div class="body">
+    <div class="numrow" style="margin-bottom:4px">
+      <div class="numcard"><div class="n"><span class="mint">95%+</span></div><div class="l">groundedness mínimo exigido antes del go-live; cero alucinaciones de política crítica</div></div>
+      <div class="numcard"><div class="n m">0</div><div class="l">datos personales de clientes en los casos del Año 1: <b>Ley 1581 no se activa</b></div></div>
+      <div class="numcard"><div class="n m">Día 1</div><div class="l">filtros PII, citas obligatorias y registro auditable de cada respuesta</div></div>
+    </div>
+    <div class="quote" style="margin-top:18px">
+      <p>“No voy a permitir que un chatbot que alucina precios destruya la plataforma. Todo lo que salga de un modelo tiene que ser evaluable, trazable y auditable.”</p>
+      <div class="who">— Andrés Malagón, CDO &nbsp;·&nbsp; <b>el CDO aprueba el go-live</b></div>
+    </div>
+    <div class="tag">Golden set con expertos · humano en el lazo · fallback entre modelos · matriz de incidentes con desactivación por feature flag.</div>
+  </div>
+  <div class="footer"><span class="serves">Para: Andrés (CDO) · Patricia (CTO)</span><span class="brand">Sumz<b>.</b> · IA Generativa Tierragrande</span><span class="pageno">08</span></div>
+</section>
+
+<!-- 9 — COSTO Y LOCK-IN (CTO/CFO) -->
+<section class="slide">
+  <div class="eyebrow">Resolución <span class="dot">·</span> Costo y lock-in</div>
+  <h1 class="headline">USD 200.000 todo incluido, gasto medido por caso y sin casarnos con ningún proveedor</h1>
+  <div class="body">
+    <div class="bars">
+      <div class="bar"><span class="lbl">Contratación senior de IA</span><span class="track"><span class="fill hi" style="width:45%"></span></span><span class="val"><b>$90.000</b> · 45%</span></div>
+      <div class="bar"><span class="lbl">Contratación #2 (IA / MLOps)</span><span class="track"><span class="fill" style="width:15%"></span></span><span class="val"><b>$30.000</b> · 15%</span></div>
+      <div class="bar"><span class="lbl">Consultoría + capacitación</span><span class="track"><span class="fill" style="width:12.5%"></span></span><span class="val"><b>$25.000</b> · 12,5%</span></div>
+      <div class="bar"><span class="lbl">Consumo de modelos (LLM)</span><span class="track"><span class="fill" style="width:10%"></span></span><span class="val"><b>$20.000</b> · 10%</span></div>
+      <div class="bar"><span class="lbl">Licencias y herramientas</span><span class="track"><span class="fill" style="width:9%"></span></span><span class="val"><b>$18.000</b> · 9%</span></div>
+      <div class="bar"><span class="lbl">Infra incremental + contingencia</span><span class="track"><span class="fill" style="width:8.5%"></span></span><span class="val"><b>$17.000</b> · 8,5%</span></div>
+    </div>
+    <div class="tag" style="margin-top:16px;font-size:14px">
+      <b>Anti-lock-in (Patricia):</b> cambiar o añadir proveedor = configuración en el gateway, no reescritura de apps. &nbsp;·&nbsp;
+      <b>¿Quién opera?</b> 1 senior + ing. MLOps + 2 ingenieros internos, sobre Databricks ya conocido. &nbsp;·&nbsp;
+      <b>Run-rate Año 2:</b> ~USD 25–50k modelos + 15–20k licencias.
+    </div>
+  </div>
+  <div class="footer"><span class="serves">Para: Patricia (CTO)</span><span class="brand">Sumz<b>.</b> · IA Generativa Tierragrande</span><span class="pageno">09</span></div>
+</section>
+
+<!-- 10 — ROI (CEO/CFO) -->
+<section class="slide">
+  <div class="eyebrow">Resolución <span class="dot">·</span> Retorno y repago</div>
+  <h1 class="headline">El Año 1 se paga solo: el valor estimado supera la inversión incluso en el escenario conservador</h1>
+  <div class="body">
+    <div class="numrow" style="align-items:flex-end">
+      <div class="numcard">
+        <div class="bignum">$100<span style="font-size:60px">–</span>300<span style="font-size:46px">k</span></div>
+        <div class="numlabel">ventas incrementales/año — <b>Caso 2 Catálogo</b> (uplift conservador 1–3%)</div>
+      </div>
+    </div>
+    <div class="numrow" style="margin-top:26px">
+      <div class="numcard"><div class="n m">$50–75k</div><div class="l">valor/año estimado del <b>Caso 1 Copiloto</b> (eficiencia + PQR evitadas)</div></div>
+      <div class="numcard"><div class="n m">$200k</div><div class="l">inversión total del Año 1, todo incluido</div></div>
+      <div class="numcard"><div class="n"><span class="mint">&gt;100%</span></div><div class="l">del presupuesto cubierto por el valor estimado, aun siendo conservadores</div></div>
+    </div>
+    <div class="tag"><b>Base declarada (supuestos S1–S6, S8):</b> ventas e-commerce ~USD 65M/año; ~40% del catálogo con fichas pobres; PQR por desconocimiento 15–25%. Son <b>estimaciones de orden de magnitud</b>; el ROI real se mide en F1–F2 con A/B testing y evolución de PQR. Reportamos ventas incrementales, no margen.</div>
+  </div>
+  <div class="footer"><span class="serves">Para: Ricardo (CEO) · Finanzas</span><span class="brand">Sumz<b>.</b> · IA Generativa Tierragrande</span><span class="pageno">10</span></div>
+</section>
+
+<!-- 11 — HITO VISIBLE 6 MESES (CEO) -->
+<section class="slide">
+  <div class="eyebrow">Resolución <span class="dot">·</span> El primer proof point</div>
+  <h1 class="headline">En 6 meses la junta ve algo tangible, demostrable y con números reales</h1>
+  <div class="body">
+    <div style="display:flex;gap:56px;align-items:center">
+      <div style="flex:0 0 auto;text-align:center">
+        <div class="bignum"><span class="m">6</span></div>
+        <div class="numlabel" style="text-align:center">meses al<br>hito junta</div>
+      </div>
+      <div style="flex:1">
+        <ul class="bul" style="margin-top:0">
+          <li><b>Demo en vivo del Copiloto</b> — un administrador pregunta y recibe respuesta correcta con cita a la política oficial. Algo que “se puede tocar”.</li>
+          <li><b>Antes/después del catálogo</b> con los <b>primeros resultados del A/B test</b> — ventas incrementales medidas, no proyectadas.</li>
+          <li><b>Tablero con el costo mensual real</b> de operación — responde directo a la CTO.</li>
+          <li><b>Primera reducción de PQR</b> por desconocimiento + la plataforma y el gobierno ya construidos.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tag"><b>Mensaje a la junta:</b> en 6 meses entregamos valor medible con riesgo interno, construimos la capacidad reutilizable y tenemos un caso de negocio con ROI real para aprobar el asistente de cara al cliente.</div>
+  </div>
+  <div class="footer"><span class="serves">Para: Ricardo (CEO) · todo el comité</span><span class="brand">Sumz<b>.</b> · IA Generativa Tierragrande</span><span class="pageno">11</span></div>
+</section>
+
+<!-- 12 — HOJA DE RUTA (TODOS) -->
+<section class="slide">
+  <div class="eyebrow">Resolución <span class="dot">·</span> Hoja de ruta 18 meses</div>
+  <h1 class="headline">Ganar confianza en el Año 1, monetizar de cara al cliente en el Año 2 — con rieles ya probados</h1>
+  <div class="diagwrap" style="margin-top:2px"><img src="diagramas/roadmap.png" alt="Hoja de ruta a 18 meses" style="max-height:430px"></div>
+  <div class="tag" style="margin-top:0"><b>Decir “no” con un plan:</b> el asistente de compras (#4) se parquea en el Año 2 — se habilita cuando los Casos 1 y 2 ya construyeron la plataforma, los guardrails y el diseño de consentimiento. El checkpoint es el hito de 6 meses.</div>
+  <div class="footer"><span class="serves">Para: todo el comité</span><span class="brand">Sumz<b>.</b> · IA Generativa Tierragrande</span><span class="pageno">12</span></div>
+</section>
+
+<!-- 13 — LA DECISIÓN (CEO) -->
+<section class="slide cover" style="justify-content:center">
+  <div class="kick">La decisión</div>
+  <div class="rule"></div>
+  <h1>Aprobar el <span class="m">Año 1</span> y el <span class="m">camino al Año 2</span></h1>
+  <p class="ask" style="margin-top:30px">
+    <b>1.</b> Aprobar <b>USD 200.000</b> para los 2 casos internos (Copiloto de tiendas + Catálogo e-commerce).<br><br>
+    <b>2.</b> Avalar el <b>plan al asistente de compras en Año 2</b>, condicionado al hito de 6 meses.<br><br>
+    <b>3.</b> Próximo paso inmediato: <b>arrancar F0</b> — plataforma común, política de uso de IA y golden set.
+  </p>
+  <div class="meta"><b>Dueño:</b> Líder del Programa de IA Generativa (reporta al CDO). &nbsp;·&nbsp; Revisión en el hito de la junta (mes 6).</div>
+  <div class="foot-brand">Sumz<b>.</b></div>
+</section>
+
+<!-- 14 — APÉNDICE: SUPUESTOS S1–S14 -->
+<section class="slide">
+  <div class="eyebrow">Apéndice <span class="dot">·</span> Supuestos declarados</div>
+  <h1 class="headline">Supuestos S1–S14: las cifras son load-bearing — si cambian, cambian los números</h1>
+  <div class="body" style="justify-content:flex-start;margin-top:6px">
+    <div class="two-col-aspt">
+    <table class="asm">
+      <tr><th style="width:14%">#</th><th>Supuesto (base · a validar en F0)</th></tr>
+      <tr><td><span class="id">S1</span></td><td>15–25% de las 60k PQR por desconocimiento de tienda</td></tr>
+      <tr><td><span class="id">S2</span></td><td>Costo de gestionar una PQR ~USD 4–6</td></tr>
+      <tr><td><span class="id">S3</span></td><td>Costo laboral cargado ~USD 8/hora</td></tr>
+      <tr><td><span class="id">S4</span></td><td>~40% del catálogo (≈11.000 SKUs) con fichas pobres</td></tr>
+      <tr><td><span class="id">S5</span></td><td>Uplift de conversión +1% a +3% (conservador)</td></tr>
+      <tr><td><span class="id">S6</span></td><td>Ventas e-commerce ~USD 65M/año, +30% anual</td></tr>
+      <tr><td><span class="id">S7</span></td><td>Adopción: tiendas y redactores dispuestos a usar IA</td></tr>
+    </table>
+    <table class="asm">
+      <tr><th style="width:14%">#</th><th>Supuesto (base · a validar en F0)</th></tr>
+      <tr><td><span class="id">S8</span></td><td>ROI estimado, no medido: el real se mide en F1–F2</td></tr>
+      <tr><td><span class="id">S9</span></td><td>RAG viable: la documentación existe (dispersa en PDFs)</td></tr>
+      <tr><td><span class="id">S10</span></td><td>Créditos de nube cubren cómputo/almacenamiento base</td></tr>
+      <tr><td><span class="id">S11</span></td><td>Calidad del dato no es el cuello de botella</td></tr>
+      <tr><td><span class="id">S12</span></td><td>Volumen de modelos moderado dentro del presupuesto</td></tr>
+      <tr><td><span class="id">S13</span></td><td>Es posible contratar el perfil senior en el rango</td></tr>
+      <tr><td><span class="id">S14</span></td><td>Llama 3.3 70B disponible y suficiente en español</td></tr>
+    </table>
+    </div>
+    <div class="tag" style="margin-top:14px"><b>Formato consultivo:</b> cada supuesto es trazable a su base o marcado como pendiente de validación en F0. El comité puede desafiar el insumo, no la propuesta entera.</div>
+  </div>
+  <div class="footer"><span class="serves">Backup Q&amp;A</span><span class="brand">Sumz<b>.</b> · IA Generativa Tierragrande</span><span class="pageno">13</span></div>
+</section>
+
+<!-- 15 — APÉNDICE: MAPA DE OBJECIONES -->
+<section class="slide">
+  <div class="eyebrow">Apéndice <span class="dot">·</span> Mapa de objeciones por directivo</div>
+  <h1 class="headline">Cada directivo tiene su objeción — y una slide que la responde antes de la reunión</h1>
+  <div class="body" style="justify-content:center">
+    <div class="maprow">
+      <div class="mapcard">
+        <div class="nm">Ricardo Salazar</div><div class="ro">CEO · economic buyer</div>
+        <div class="q">“En seis meses quiero algo que la junta y los clientes puedan tocar… el competidor ya lanzó.”</div>
+        <div class="a"><b>Responde:</b> hito tocable en mes 6 (slide 11) · ROI que se paga solo (10) · el Año 1 es el camino explícito al asistente de compras (12).</div>
+      </div>
+      <div class="mapcard">
+        <div class="nm">Patricia Duarte</div><div class="ro">CTO · technical buyer</div>
+        <div class="q">“Costos impredecibles… ¿qué tan casados quedamos con cada proveedor?… ¿quién opera esto?”</div>
+        <div class="a"><b>Responde:</b> gateway agnóstico anti-lock-in y gasto por caso (slide 9) · política que ataca el shadow AI (8) · modelo operativo claro (9).</div>
+      </div>
+      <div class="mapcard">
+        <div class="nm">Andrés Malagón</div><div class="ro">CDO · gobierno y riesgo</div>
+        <div class="q">“No voy a permitir que un chatbot que alucina precios destruya la plataforma… evaluable, trazable y auditable.”</div>
+        <div class="a"><b>Responde:</b> compuerta go/no-go, groundedness mín. 95% (slide 8) · casos Año 1 sin datos personales, Ley 1581 (4, 8) · consentimiento diseñado antes del cliente (12).</div>
+      </div>
+    </div>
+    <div class="tag" style="margin-top:18px">Citas textuales de las entrevistas de descubrimiento (caso Tierragrande). Una buena presentación ya ganó cada argumento antes de que empiece la reunión.</div>
+  </div>
+  <div class="footer"><span class="serves">Backup Q&amp;A</span><span class="brand">Sumz<b>.</b> · IA Generativa Tierragrande</span><span class="pageno">14</span></div>
+</section>
+
+</body>
+</html>

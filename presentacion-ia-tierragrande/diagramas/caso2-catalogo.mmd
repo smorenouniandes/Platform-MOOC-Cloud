@@ -1,0 +1,51 @@
+---
+config:
+  theme: base
+  themeVariables:
+    fontFamily: "Arial, Helvetica, sans-serif"
+    fontSize: "15px"
+    primaryColor: "#D4D6F2"
+    primaryBorderColor: "#5AF8BD"
+    primaryTextColor: "#020617"
+    lineColor: "#797B97"
+    clusterBkg: "#F7F8FA"
+    clusterBorder: "#1A2D26"
+---
+flowchart TB
+    subgraph FE["FRONTEND"]
+        A1["Redactor - Panel catalogo<br/>Databricks App"]
+        A2["Boton: generar lote /<br/>revisar fichas"]
+    end
+    subgraph BE["BACKEND"]
+        B_GR["Guardrail:<br/>groundedness vs atributos + marca"]
+        B_JOB["Job batch de generacion<br/>SQL / notebook"]
+        B_EXP["Exportador a e-commerce<br/>+ bandera A/B"]
+        B_API["API del panel HITL:<br/>aprobar / editar / rechazar"]
+    end
+    ECOM["E-commerce<br/>sistema externo"]
+    subgraph GENAI["SERVICIOS GENAI"]
+        G_Q["ai_query() via AI Gateway"]
+        G_TR["MLflow Tracing +<br/>Inference Tables"]
+        G_LLM["LLM GPT-4o<br/>(o Llama 3.3 70B)"]
+    end
+    subgraph LK["LAKEHOUSE / UNITY CATALOG"]
+        L_CAND["Delta: fichas candidatas<br/>pendiente_revision"]
+        L_GOLD["Gold: productos SKU<br/>+ atributos reales"]
+        L_AB["Delta: resultados A/B<br/>conversion, ingresos"]
+        L_APR["Delta: fichas aprobadas<br/>+ autor / fecha"]
+        L_UC["Unity Catalog:<br/>permisos + linaje + auditoria"]
+    end
+    DASH["Dashboard<br/>Power BI / AI-BI"]
+    A1 --> A2
+    A2 --> B_JOB
+    A2 --> B_API
+    B_JOB --> G_Q --> G_LLM
+    B_JOB -.->|traza| G_TR
+    B_JOB --> L_CAND
+    B_JOB --> L_GOLD
+    B_GR --> B_JOB
+    B_API --> L_APR
+    B_API --> B_EXP --> ECOM
+    ECOM -.->|eventos de venta| L_AB
+    L_AB --> DASH
+    L_UC -.-> LK

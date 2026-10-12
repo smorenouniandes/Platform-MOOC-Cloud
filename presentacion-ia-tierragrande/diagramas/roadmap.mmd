@@ -1,0 +1,41 @@
+---
+config:
+  theme: base
+  themeVariables:
+    fontFamily: "Arial, Helvetica, sans-serif"
+    fontSize: "14px"
+    primaryTextColor: "#020617"
+    lineColor: "#797B97"
+    sectionBkgColor: "#F7F8FA"
+    altSectionBkgColor: "#FFFFFF"
+    gridColor: "#D4D6F2"
+    taskBkgColor: "#D4D6F2"
+    taskBorderColor: "#797B97"
+    taskTextColor: "#020617"
+    taskTextDarkColor: "#020617"
+    activeTaskBkgColor: "#5AF8BD"
+    activeTaskBorderColor: "#1A2D26"
+    doneTaskBkgColor: "#797B97"
+    milestoneBkgColor: "#5AF8BD"
+    critBkgColor: "#5AF8BD"
+    todayLineColor: "#1A2D26"
+---
+gantt
+    title Hoja de ruta IA Generativa Tierragrande - 18 meses
+    dateFormat  YYYY-MM-DD
+    axisFormat  M%m
+    section F0 Fundaciones
+    Plataforma comun + Gateway + Observabilidad :f0a, 2026-01-01, 60d
+    Politica de uso de IA + Contratacion        :f0b, 2026-01-01, 60d
+    Golden set con expertos de tienda           :f0c, 2026-01-15, 45d
+    section F1 Casos 1 y 2
+    Copiloto interno de tiendas RAG             :f1a, after f0a, 90d
+    Contenido de catalogo e-commerce HITL       :f1b, after f0c, 90d
+    HITO JUNTA mes 6                            :milestone, crit, m6, 2026-06-30, 0d
+    section F2 Expansion interna
+    Escalado catalogo + copiloto 124 tiendas    :f2a, 2026-07-01, 120d
+    Analitica conversacional piloto             :f2b, 2026-08-01, 120d
+    Caso de negocio Ano 2 + consentimiento      :f2c, 2026-10-01, 90d
+    section F3 Cara al cliente
+    Asistente de compras - piloto               :f3a, 2027-01-01, 120d
+    Expansion y medicion de impacto             :f3b, 2027-04-01, 90d

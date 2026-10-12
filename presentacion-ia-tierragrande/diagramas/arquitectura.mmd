@@ -1,0 +1,42 @@
+---
+config:
+  theme: base
+  themeVariables:
+    fontFamily: "Arial, Helvetica, sans-serif"
+    fontSize: "16px"
+    primaryColor: "#D4D6F2"
+    primaryBorderColor: "#797B97"
+    primaryTextColor: "#020617"
+    lineColor: "#797B97"
+    clusterBkg: "#F7F8FA"
+    clusterBorder: "#1A2D26"
+---
+flowchart TB
+    subgraph CH["Canales"]
+        A1["Copiloto Tiendas<br/>Caso 1"]
+        A2["Panel Redactores<br/>Caso 2"]
+    end
+    subgraph APP["Orquestacion y Aplicacion"]
+        O1["Logica por caso + retriever"]
+        O2["Human-in-the-loop"]
+    end
+    subgraph GR["Guardrails y Evaluacion"]
+        G1["PII desde dia 1 · citas obligatorias"]
+        G2["Groundedness · umbral no-se"]
+    end
+    subgraph KN["Conocimiento - RAG"]
+        K1["Databricks Vector Search"]
+        K2["Metadatos + version de fuente"]
+    end
+    GW["Gateway de Modelos - Mosaic AI<br/>agnostico · anti-lock-in · control de costos + cache"]
+    subgraph LLM["Modelos - version a confirmar en F0"]
+        L1["Primario: Llama 3.3 70B<br/>datos en casa"]
+        L2["Secundario F2:<br/>Claude Haiku / GPT-4o mini"]
+    end
+    DATA["PLATAFORMA DE DATOS EXISTENTE - Databricks / Lakehouse medallion<br/>Unity Catalog · gobierno · NO se rediseña"]
+    CH --> APP --> GR --> GW --> LLM
+    APP --> KN --> DATA
+    GW -.-> L1
+    GW -.-> L2
+    style GW fill:#1A2D26,stroke:#5AF8BD,stroke-width:3px,color:#FFFFFF
+    style DATA fill:#010516,stroke:#5AF8BD,stroke-width:2px,color:#FFFFFF

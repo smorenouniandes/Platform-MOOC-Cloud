@@ -1,0 +1,54 @@
+---
+config:
+  theme: base
+  themeVariables:
+    fontFamily: "Arial, Helvetica, sans-serif"
+    fontSize: "15px"
+    primaryColor: "#D4D6F2"
+    primaryBorderColor: "#5AF8BD"
+    primaryTextColor: "#020617"
+    lineColor: "#797B97"
+    clusterBkg: "#F7F8FA"
+    clusterBorder: "#1A2D26"
+---
+flowchart TB
+    subgraph FE["FRONTEND"]
+        A1["Admin de tienda<br/>navegador / movil"]
+        A2["Chat UI<br/>Databricks App"]
+    end
+    subgraph BE["BACKEND - Databricks App server"]
+        B_API["API de la App:<br/>recibe pregunta + identidad"]
+        B_IN["Guardrail entrada:<br/>PII + alcance"]
+        B_ORQ["Orquestador RAG<br/>cadena simple"]
+        B_PR["Ensamblado de prompt<br/>+ cita obligatoria"]
+        B_OUT["Guardrail salida:<br/>groundedness + cita valida"]
+    end
+    subgraph GENAI["SERVICIOS GENAI - Mosaic AI"]
+        G_GW["AI Gateway:<br/>enrutamiento + rate limit<br/>+ cache + log"]
+        G_EMB["Embeddings endpoint"]
+        G_TR["MLflow Tracing +<br/>Inference Tables"]
+        G_VS["Vector Search:<br/>endpoint de consulta"]
+        G_P["LLM primario<br/>Llama 3.3 70B"]
+        G_FB["LLM fallback<br/>GPT-4o mini"]
+    end
+    subgraph LK["LAKEHOUSE / UNITY CATALOG"]
+        L_VI["Vector Search<br/>Delta Sync Index"]
+        L_CH["Delta: chunks + metadatos"]
+        L_PDF["Volume: PDFs crudos"]
+        L_UC["Unity Catalog:<br/>permisos + linaje + auditoria"]
+        L_FB["Delta: feedback<br/>pulgar arriba / abajo"]
+    end
+    A1 --> A2 --> B_API --> B_IN --> B_ORQ
+    B_ORQ --> B_PR --> B_OUT --> A2
+    B_ORQ -.->|traza| G_TR
+    B_PR --> G_GW
+    B_ORQ --> G_VS
+    G_GW --> G_P
+    G_GW -->|si falla primario| G_FB
+    G_VS --> L_VI
+    L_VI -->|sincroniza desde| L_CH
+    L_CH -->|ingesta desde| L_PDF
+    G_EMB --> L_CH
+    L_UC -.-> LK
+    A2 -.->|feedback| L_FB
+    L_FB -.-> G_GW
